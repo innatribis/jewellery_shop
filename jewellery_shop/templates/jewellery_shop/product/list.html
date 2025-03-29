@@ -1,0 +1,56 @@
+{% extends "jewellery_shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.name }}{% elif collection %}{{ collection.name }}{% elif finishing %}{{ finishing.name }}{% else %}Ювелирные изделия{% endif %}
+{% endblock %}
+{% block content %}
+    <div id="sidebar">
+        <h2>Категории</h2>
+        <ul>
+            <li {% if not category %}class="selected"{% endif %}>
+                <a href="{% url "jewellery_shop:product_list" %}">Все</a>
+            </li>
+            {% for cat in categories %}
+                <li {% if category.slug == cat.slug %}class="selected"{% endif %}>
+                    <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+	<h2>Коллекции</h2>
+        <ul>
+            <li {% if not collection %}class="selected"{% endif %}>
+                <a href="{% url "jewellery_shop:product_list" %}">Все</a>
+            </li>
+            {% for col in collections %}
+                <li {% if collection.slug == col.slug %}class="selected"{% endif %}>
+                    <a href="{{ col.get_absolute_url }}">{{ col.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    
+	<h2>Отделки</h2>
+        <ul>
+            <li {% if not finishing %}class="selected"{% endif %}>
+                <a href="{% url "jewellery_shop:product_list" %}">Все</a>
+            </li>
+            {% for fin in finishings %}
+                <li {% if finishing.slug == fin.slug %}class="selected"{% endif %}>
+                    <a href="{{ fin.get_absolute_url }}">{{ fin.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="main" class="product-list">
+        <h1>{% if category %}{{ category.name }}{% elif collection %}{{ collection.name }}{% elif finishing %}{{ finishing.name }}{% else %}Ювелирные изделия{% endif %}</h1>
+        {% for product in products %}
+            <div class="item">
+                <a href="{{ product.get_absolute_url }}">
+                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "images/empty.jpg" %}{% endif %}">
+                </a>
+                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                {{ product.price }} руб.
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "jewellery_shop/base.html" %}
+{% load static %}
+{% block title %}
+    {% if category %}{{ category.title }}{% else %}Украшения{% endif %}
+{% endblock %}
+{% block content %}
+    <div class="product-detail">
+        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static "images/empty.jpg" %}{% endif %}">
+        <h1>{{ product.name }}</h1>
+        <h3><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h3>
+	{% if product.collection%}<h3><a href="{{ product.collection.get_absolute_url }}">{{ product.collection }}</a></h3>{%endif%}
+        <p class="price">{{ product.price }} руб.</p>
+	<form action="{% url "cart:cart_add" product.id %}" method="post">
+    		{{ cart_product_form}}
+    		{% csrf_token%}
+		<p></p>
+    		<input type="submit" value="Добавить в корзину">
+	</form>
+        {{ product.description|linebreaks }}
+	{% if gems%} <strong>Драгоценные камни: </strong>{%endif%}
+	{% for g in gems %}
+                <p> {{g.gem}}. Огранка: {{g.get_cut_display}}. Вес каждого камня: {{g.weight}} карат. Количество в изделии: {{g.count}}. </p>
+        {% endfor %}
+	{% if metals%} <b>Металлы: </b>{%endif%}
+	{% for m in metals %}
+                <p> {{m.metal}}. Вес в изделии: {{m.weight}} грамм.</p>
+        {% endfor %}
+	{% if finishings%} <b>Отделки: </b>{%endif%}
+	{% for f in finishings %}
+                <p><a href="{{ f.get_absolute_url }}"> {{f.name}}</a></p>
+        {% endfor %}
+    </div>
+{% endblock %}

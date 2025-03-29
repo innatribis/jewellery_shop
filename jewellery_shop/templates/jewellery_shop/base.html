@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>{% block title %}Ювелирная мастерская{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+<div id="header">
+    <a href="/" class="logo">Ювелирная мастерская</a>
+</div>
+<div id="subheader">
+    <div class="cart">
+    {% with total_items=cart|length %}
+        {% if cart|length > 0 %}
+            В вашей корзине
+            <a href="{% url "cart:cart_detail" %}">
+                {{ total_items }} ювелирных изделий на 
+                {{ cart.get_total_price }} руб.
+            </a>
+        {% else %}
+            Ваша корзина пуста, но сейчас самое время её заполнить!
+        {% endif %}
+    {% endwith %}
+    <form action="{% url 'orders:order_find_num'%}" method="get" class="numform">
+	<p>Уже сделали заказ? Введите номер заказа и узнайте его статус: <input type=number min=1 name=fid></p>
+    </form>
+</div>
+</div>
+<div id="content">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

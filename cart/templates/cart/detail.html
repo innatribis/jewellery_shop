@@ -1,0 +1,44 @@
+{% extends "jewellery_shop/base.html" %}
+{% load static %}
+{% block title %}
+    Ваша корзина
+{% endblock %}
+{% block content %}
+    <h1>Ваша корзина</h1>
+    <table class="cart">
+        <tbody>
+        {% for item in cart %}
+            {% with product=item.product %}
+                <tr>
+                    <td>
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="
+                                {% if product.image %}
+                                    {{ product.image.url }}
+                                {% else %}
+                                    {% static "images/empty.jpg" %}
+                                {% endif %}">
+                        </a>
+                    </td>
+			
+                    <td>
+			<h2>{{ product.name }}</h2>
+			<p>Количество: {{ item.quantity }}</p>
+		    </td>
+			<td class="num"><h3> {{ item.total_price }} руб.</h3></td>
+                    <td class="but"><a href="{% url "cart:cart_remove" product.id%}" class="button">Удалить</a></td>
+                </tr>
+            {% endwith %}
+        {% endfor %}
+        <tr class="total">
+            <td>Итого</td>
+            <td colspan="2"></td>
+            <td class="num">{{ cart.get_total_price }} руб.</td>
+        </tr>
+        </tbody>
+    </table>
+    <p class="text-right">
+        <a href="{% url "jewellery_shop:product_list" %}" class="button light">Продолжить покупки</a>
+        <a href="{% url "orders:order_create" %}" class="button">Заказать</a>
+    </p>
+{% endblock %}
