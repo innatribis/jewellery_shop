@@ -1,0 +1,25 @@
+{% extends "jewellery_shop/base.html" %}
+
+{% block title %}Отслеживание заказа{% endblock %}
+
+{% block content %}
+    {% if order %}
+	
+    <h3>Заказ номер {{order.id}}</h3>
+        <ul>
+            {% for item in cart %}
+                <li>
+                    {{ item.quantity }}x {{ item.product.name }}
+                    <span>{{ item.price }} руб.</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <p>Итого: {{ sum }} руб.</p>
+	<p>Статус: {{order.get_status_display}}</p>
+	{% if order.status == '5' or order.status == '6' %}<p>Почтовый трекер: {{order.track}}</p>{%endif%}
+	
+    {%else%} <h1>Ничего не найдено...</h1>
+	<p>Проверьте правильность номера вашего заказа.</p> 
+	<p>Если это не помогло, то свяжитесь с нами по почте inna.tribis@yandex.ru</p>
+    {% endif %}
+{% endblock %}
